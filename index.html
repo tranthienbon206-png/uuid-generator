@@ -1,0 +1,422 @@
+<!DOCTYPE html>
+<html lang="vi">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Công cụ tạo mã UUID Online miễn phí</title>
+    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4.1.11"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        * {
+            font-family: 'Roboto', sans-serif;
+        }
+
+        body {
+            background: #f8fafc;
+        }
+
+        .brand {
+            background: #fdca1e;
+        }
+
+        .brand:hover {
+            background: #f2bd08;
+        }
+
+        .focus-brand:focus {
+            outline: none;
+            border-color: #fdca1e;
+            box-shadow: 0 0 0 3px #fdca1e35;
+        }
+
+        .result-row {
+            overflow-wrap: anywhere;
+        }
+    </style>
+</head>
+
+<body class="min-h-screen text-slate-800">
+    <main class="max-w-4xl mx-auto px-4 py-7 sm:py-10">
+        <div class="mb-6">
+            <div class="flex items-center gap-2 mb-2">
+                <span class="brand w-10 h-10 rounded-xl flex items-center justify-center text-xl">#</span>
+                <span class="font-bold text-lg">UUID Generator</span>
+            </div>
+            <h1 class="text-2xl sm:text-3xl font-bold text-slate-900">Công cụ tạo mã UUID</h1>
+            <p class="text-slate-500 mt-2 text-sm sm:text-base">Tạo, kiểm tra và quản lý mã UUID nhanh chóng ngay trên
+                trình duyệt.</p>
+        </div>
+
+        <section class="bg-white border border-slate-200 rounded-2xl p-4 sm:p-6 shadow-sm mb-5">
+            <div class="flex items-center justify-between gap-3 mb-5">
+                <h2 class="font-bold text-lg">Tạo mã UUID</h2>
+                <span class="text-xs bg-yellow-100 text-yellow-800 px-3 py-1 rounded-full font-medium">Miễn phí</span>
+            </div>
+
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-4">
+                <div>
+                    <label for="version" class="block text-sm font-semibold mb-2">Phiên bản UUID</label>
+                    <select id="version"
+                        class="focus-brand w-full border border-slate-300 rounded-lg px-3 py-3 bg-white">
+                        <option value="4">UUID v4 - Ngẫu nhiên</option>
+                        <option value="5">UUID v5 - Theo tên</option>
+                    </select>
+                </div>
+                <div>
+                    <label for="count" class="block text-sm font-semibold mb-2">Số lượng mã</label>
+                    <input id="count" type="number" min="1" max="100" value="5"
+                        class="focus-brand w-full border border-slate-300 rounded-lg px-3 py-3">
+                </div>
+            </div>
+
+            <div id="v5Options" class="hidden border border-slate-200 bg-slate-50 rounded-xl p-4 mb-4">
+                <h3 class="font-semibold mb-3">Thiết lập UUID v5</h3>
+                <div class="mb-3">
+                    <label for="nameInput" class="block text-sm font-medium mb-2">Tên hoặc nội dung</label>
+                    <input id="nameInput" type="text" value="example.com" placeholder="Nhập tên hoặc nội dung..."
+                        class="focus-brand w-full border border-slate-300 rounded-lg px-3 py-3 bg-white">
+                </div>
+                <div class="mb-3">
+                    <label for="namespace" class="block text-sm font-medium mb-2">Namespace có sẵn</label>
+                    <select id="namespace"
+                        class="focus-brand w-full border border-slate-300 rounded-lg px-3 py-3 bg-white">
+                        <option value="6ba7b810-9dad-11d1-80b4-00c04fd430c8">DNS</option>
+                        <option value="6ba7b811-9dad-11d1-80b4-00c04fd430c8">URL</option>
+                        <option value="6ba7b812-9dad-11d1-80b4-00c04fd430c8">OID</option>
+                        <option value="6ba7b814-9dad-11d1-80b4-00c04fd430c8">X.500</option>
+                        <option value="custom">Tùy chỉnh</option>
+                    </select>
+                </div>
+                <div id="customNamespaceBox" class="hidden">
+                    <label for="customNamespace" class="block text-sm font-medium mb-2">Namespace UUID tùy chỉnh</label>
+                    <input id="customNamespace" type="text" placeholder="xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx"
+                        class="focus-brand w-full border border-slate-300 rounded-lg px-3 py-3 bg-white">
+                </div>
+            </div>
+
+            <div class="mb-5">
+                <label for="format" class="block text-sm font-semibold mb-2">Định dạng mã</label>
+                <select id="format" class="focus-brand w-full border border-slate-300 rounded-lg px-3 py-3 bg-white">
+                    <option value="lower">Chữ thường có dấu gạch ngang</option>
+                    <option value="upper">CHỮ HOA CÓ DẤU GẠCH NGANG</option>
+                    <option value="compact">Không có dấu gạch ngang</option>
+                </select>
+            </div>
+
+            <button id="generateBtn" class="brand w-full rounded-lg py-3 font-bold text-slate-900 transition">
+                Tạo mã UUID
+            </button>
+            <p id="message" class="text-sm mt-3 text-red-600 hidden"></p>
+        </section>
+
+        <section class="bg-white border border-slate-200 rounded-2xl p-4 sm:p-6 shadow-sm mb-5">
+            <div class="flex flex-wrap items-center justify-between gap-3 mb-4">
+                <div>
+                    <h2 class="font-bold text-lg">Kết quả</h2>
+                    <p class="text-sm text-slate-500 mt-1"><span id="resultCount">1</span> mã UUID</p>
+                </div>
+                <div class="flex flex-wrap gap-2">
+                    <button id="copyAllBtn"
+                        class="border border-slate-300 rounded-lg px-3 py-2 text-sm font-medium hover:bg-slate-50">Sao
+                        chép tất cả</button>
+                    <button id="downloadBtn" class="brand rounded-lg px-3 py-2 text-sm font-semibold">Tải TXT</button>
+                </div>
+            </div>
+
+            <div id="results" class="space-y-2">
+                <div
+                    class="result-row flex items-center justify-between gap-3 bg-slate-50 border border-slate-200 rounded-lg p-3">
+                    <code class="text-sm break-all">550e8400-e29b-41d4-a716-446655440000</code>
+                    <span class="text-xs text-slate-400">Ví dụ</span>
+                </div>
+            </div>
+            <button id="clearBtn" class="mt-4 text-sm text-red-500 hover:text-red-700 font-medium">Xóa kết quả</button>
+        </section>
+
+        <section class="bg-white border border-slate-200 rounded-2xl p-4 sm:p-6 shadow-sm mb-5">
+            <h2 class="font-bold text-lg mb-4">Kiểm tra mã UUID</h2>
+            <label for="validateInput" class="block text-sm font-semibold mb-2">Nhập mã UUID cần kiểm tra</label>
+            <input id="validateInput" type="text" placeholder="Ví dụ: 550e8400-e29b-41d4-a716-446655440000"
+                class="focus-brand w-full border border-slate-300 rounded-lg px-3 py-3 mb-3">
+            <button id="validateBtn" class="brand rounded-lg px-5 py-3 font-semibold w-full sm:w-auto">Kiểm tra
+                UUID</button>
+            <div id="validateResult" class="hidden mt-4 rounded-lg p-4 text-sm"></div>
+        </section>
+
+        <section class="bg-white border border-slate-200 rounded-2xl p-4 sm:p-6 shadow-sm">
+            <h2 class="font-bold text-lg mb-3">Thông tin về UUID</h2>
+            <div class="space-y-3 text-sm text-slate-600 leading-6">
+                <p><strong class="text-slate-800">UUID là gì?</strong> UUID (Universally Unique Identifier) là mã định
+                    danh duy nhất được sử dụng để nhận diện dữ liệu trong các hệ thống và ứng dụng.</p>
+                <p><strong class="text-slate-800">UUID v4:</strong> Tạo mã dựa trên các giá trị ngẫu nhiên.</p>
+                <p><strong class="text-slate-800">UUID v5:</strong> Tạo mã dựa trên tên và namespace bằng thuật toán
+                    SHA-1. Cùng một tên và namespace sẽ tạo ra cùng một UUID.</p>
+                <p><strong class="text-slate-800">Bảo mật:</strong> Mã được tạo và xử lý trực tiếp trên trình duyệt của
+                    bạn.</p>
+            </div>
+        </section>
+
+        <p class="text-center text-xs text-slate-400 mt-6">UUID Generator - Công cụ tạo mã UUID trực tuyến</p>
+    </main>
+
+    <script>
+        const $ = (id) => document.getElementById(id);
+        let uuidList = [];
+
+        const uuidRegex = /^[0-9a-f]{8}-[0-9a-f]{4}-[1-8][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i;
+
+        function showMessage(message) {
+            $('message').textContent = message;
+            $('message').classList.remove('hidden');
+        }
+
+        function hideMessage() {
+            $('message').textContent = '';
+            $('message').classList.add('hidden');
+        }
+
+        async function gbCopy(text) {
+            try {
+                await navigator.clipboard.writeText(text);
+                alert('Đã sao chép thành công!');
+            } catch (error) {
+                const textarea = document.createElement('textarea');
+                textarea.value = text;
+                textarea.style.position = 'fixed';
+                textarea.style.opacity = '0';
+                document.body.appendChild(textarea);
+                textarea.select();
+                const success = document.execCommand('copy');
+                textarea.remove();
+                alert(success ? 'Đã sao chép thành công!' : 'Không thể sao chép. Vui lòng thử lại.');
+            }
+        }
+
+        function gbDownload(content, filename) {
+            const blob = new Blob([content], { type: 'text/plain;charset=utf-8' });
+            const url = URL.createObjectURL(blob);
+            const link = document.createElement('a');
+            link.href = url;
+            link.download = filename;
+            document.body.appendChild(link);
+            link.click();
+            link.remove();
+            URL.revokeObjectURL(url);
+        }
+
+        function formatUUID(uuid) {
+            const format = $('format').value;
+            if (format === 'upper') return uuid.toUpperCase();
+            if (format === 'compact') return uuid.replace(/-/g, '');
+            return uuid.toLowerCase();
+        }
+
+        function uuidV4() {
+            if (crypto.randomUUID) return crypto.randomUUID();
+
+            const bytes = new Uint8Array(16);
+            crypto.getRandomValues(bytes);
+            bytes[6] = (bytes[6] & 0x0f) | 0x40;
+            bytes[8] = (bytes[8] & 0x3f) | 0x80;
+
+            const hex = Array.from(bytes, b => b.toString(16).padStart(2, '0')).join('');
+            return [
+                hex.slice(0, 8),
+                hex.slice(8, 12),
+                hex.slice(12, 16),
+                hex.slice(16, 20),
+                hex.slice(20)
+            ].join('-');
+        }
+
+        function uuidToBytes(uuid) {
+            if (!uuidRegex.test(uuid)) throw new Error('Namespace UUID không hợp lệ.');
+            return new Uint8Array(uuid.replace(/-/g, '').match(/.{2}/g).map(hex => parseInt(hex, 16)));
+        }
+
+        function bytesToUUID(bytes) {
+            const hex = Array.from(bytes, b => b.toString(16).padStart(2, '0')).join('');
+            return [
+                hex.slice(0, 8),
+                hex.slice(8, 12),
+                hex.slice(12, 16),
+                hex.slice(16, 20),
+                hex.slice(20)
+            ].join('-');
+        }
+
+        async function uuidV5(name, namespace) {
+            if (!crypto.subtle) {
+                throw new Error('Trình duyệt cần hỗ trợ Web Crypto và chạy trên HTTPS hoặc localhost để tạo UUID v5.');
+            }
+
+            const namespaceBytes = uuidToBytes(namespace);
+            const nameBytes = new TextEncoder().encode(name);
+            const input = new Uint8Array(namespaceBytes.length + nameBytes.length);
+
+            input.set(namespaceBytes);
+            input.set(nameBytes, namespaceBytes.length);
+
+            const hash = await crypto.subtle.digest('SHA-1', input);
+            const bytes = new Uint8Array(hash).slice(0, 16);
+
+            bytes[6] = (bytes[6] & 0x0f) | 0x50;
+            bytes[8] = (bytes[8] & 0x3f) | 0x80;
+
+            return bytesToUUID(bytes);
+        }
+
+        function renderResults() {
+            $('resultCount').textContent = uuidList.length;
+
+            if (uuidList.length === 0) {
+                $('results').innerHTML = '<p class="text-sm text-slate-400 text-center py-5">Chưa có mã UUID nào. Hãy tạo mã mới.</p>';
+                return;
+            }
+
+            $('results').innerHTML = '';
+
+            uuidList.forEach((uuid, index) => {
+                const row = document.createElement('div');
+                row.className = 'result-row flex items-center justify-between gap-3 bg-slate-50 border border-slate-200 rounded-lg p-3';
+
+                const code = document.createElement('code');
+                code.className = 'text-sm break-all min-w-0';
+                code.textContent = uuid;
+
+                const button = document.createElement('button');
+                button.className = 'shrink-0 text-sm font-semibold text-slate-700 hover:text-black border border-slate-300 bg-white rounded-md px-3 py-2';
+                button.textContent = 'Sao chép';
+                button.addEventListener('click', () => gbCopy(uuid));
+
+                row.append(code, button);
+                $('results').appendChild(row);
+            });
+        }
+
+        $('version').addEventListener('change', () => {
+            $('v5Options').classList.toggle('hidden', $('version').value !== '5');
+        });
+
+        $('namespace').addEventListener('change', () => {
+            $('customNamespaceBox').classList.toggle('hidden', $('namespace').value !== 'custom');
+        });
+
+        $('generateBtn').addEventListener('click', async () => {
+            hideMessage();
+
+            const count = Number($('count').value);
+            const version = $('version').value;
+
+            if (!Number.isInteger(count) || count < 1 || count > 100) {
+                showMessage('Vui lòng nhập số lượng từ 1 đến 100.');
+                return;
+            }
+
+            if (version === '5' && !$('nameInput').value.trim()) {
+                showMessage('Vui lòng nhập tên hoặc nội dung để tạo UUID v5.');
+                return;
+            }
+
+            let namespace = $('namespace').value;
+
+            if (namespace === 'custom') {
+                namespace = $('customNamespace').value.trim();
+            }
+
+            if (version === '5' && !uuidRegex.test(namespace)) {
+                showMessage('Namespace UUID không hợp lệ. Vui lòng kiểm tra lại.');
+                return;
+            }
+
+            const button = $('generateBtn');
+            button.disabled = true;
+            button.textContent = 'Đang tạo mã...';
+
+            try {
+                const newList = [];
+
+                for (let i = 0; i < count; i++) {
+                    let uuid;
+
+                    if (version === '4') {
+                        uuid = uuidV4();
+                    } else {
+                        uuid = await uuidV5($('nameInput').value, namespace);
+                    }
+
+                    newList.push(formatUUID(uuid));
+                }
+
+                uuidList = newList;
+                renderResults();
+            } catch (error) {
+                showMessage(error.message || 'Đã xảy ra lỗi khi tạo UUID.');
+            } finally {
+                button.disabled = false;
+                button.textContent = 'Tạo mã UUID';
+            }
+        });
+
+        $('copyAllBtn').addEventListener('click', () => {
+            if (uuidList.length === 0) {
+                alert('Chưa có mã UUID để sao chép.');
+                return;
+            }
+            gbCopy(uuidList.join('\n'));
+        });
+
+        $('downloadBtn').addEventListener('click', () => {
+            if (uuidList.length === 0) {
+                alert('Chưa có mã UUID để tải xuống.');
+                return;
+            }
+            gbDownload(uuidList.join('\n'), 'uuid-list.txt');
+        });
+
+        $('clearBtn').addEventListener('click', () => {
+            uuidList = [];
+            renderResults();
+            hideMessage();
+        });
+
+        $('validateBtn').addEventListener('click', () => {
+            const value = $('validateInput').value.trim();
+            const result = $('validateResult');
+
+            result.classList.remove('hidden', 'bg-green-50', 'text-green-800', 'bg-red-50', 'text-red-800');
+
+            if (!uuidRegex.test(value)) {
+                result.classList.add('bg-red-50', 'text-red-800');
+                result.textContent = 'UUID không hợp lệ. Vui lòng kiểm tra định dạng và các ký tự.';
+                return;
+            }
+
+            const version = parseInt(value[14], 16);
+            const variant = parseInt(value[19], 16);
+
+            result.classList.add('bg-green-50', 'text-green-800');
+            result.innerHTML = '';
+
+            const title = document.createElement('p');
+            title.className = 'font-bold mb-2';
+            title.textContent = 'UUID hợp lệ!';
+
+            const detail = document.createElement('p');
+            detail.textContent = 'Phiên bản: UUID v' + version + ' | Variant: ' + ((variant & 0x8) ? 'RFC 4122 / RFC 9562' : 'Khác');
+
+            const valueText = document.createElement('p');
+            valueText.className = 'mt-1 break-all';
+            valueText.textContent = 'Mã UUID: ' + value;
+
+            result.append(title, detail, valueText);
+        });
+
+        renderResults();
+    </script>
+</body>
+
+</html>
